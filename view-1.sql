@@ -1,0 +1,1 @@
+SELECT date_trunc('month', "date", ), sum("summ_plan") ,sum("summ_fact") FROM public."Plan-fact analysis" WHERE "object" = 1 GROUP BY date_trunc('month', "date")

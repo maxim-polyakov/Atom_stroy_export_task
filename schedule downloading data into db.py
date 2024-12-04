@@ -14,7 +14,7 @@ def insert_into_db():
     df.to_sql("План-факт анализ", con=engine_remote, schema='messtorage',
           index=False, if_exists='append')
 
-schedule.every().seconds.do(insert_into_db)
+schedule.every().day.do(insert_into_db)
 
 if __name__ == "__main__":
 #
