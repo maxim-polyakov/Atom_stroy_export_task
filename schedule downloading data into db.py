@@ -5,13 +5,13 @@ import datetime as dt
 import schedule
 
 
-conn_remote = psycopg2.connect('postgres://postgres:gaTResKPJX25@ep-round-paper-091468.us-east-2.aws.neon.tech/BotsMemory')
-engine_remote = create_engine(f'postgresql://postgres:gaTResKPJX25@ep-round-paper-091468.us-east-2.aws.neon.tech/BotsMemory')
+conn_remote = psycopg2.connect('postgresql://postgres:postgres@localhost:5432/postgres')
+engine_remote = create_engine(f'postgresql://postgres:postgres@localhost:5432/postgres')
 
 def insert_into_db():
     print("importing data to dab")
     df = pd.read_csv('Report.csv')
-    df.to_sql("План-факт анализ", con=engine_remote, schema='messtorage',
+    df.to_sql("plan_fact_analysis", con=engine_remote, schema='public',
           index=False, if_exists='append')
 
 schedule.every().day.do(insert_into_db)
