@@ -10,7 +10,7 @@ engine_remote = create_engine(f'postgresql://postgres:postgres@localhost:5432/po
 
 def insert_into_db():
     print("importing data to dab")
-    df = pd.read_csv('Report.csv')
+    df = pd.read_csv('Report - Copy.csv')
     df.to_sql("plan_fact_analysis", con=engine_remote, schema='public',
           index=False, if_exists='append')
 
