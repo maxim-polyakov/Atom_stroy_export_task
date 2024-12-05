@@ -1,0 +1,1 @@
+SELECT date_trunc('month', date_w) as Period, sum(plan) as plan, sum(fact) as Fact FROM public.plan_fact_analysis where object = 'Объект1' GROUP BY date_trunc('month', date_w)
