@@ -1,1 +1,0 @@
-SELECT * from procc('year', 'Объект1');
