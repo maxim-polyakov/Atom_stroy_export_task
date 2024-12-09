@@ -1,14 +1,17 @@
-CREATE OR REPLACE FUNCTION nakoppp(a varchar, obj varchar)
-RETURNS TABLE (Period timestamptz, Plan integer, Fact integer, PlanNakop integer, FactNakop integer)
+CREATE OR REPLACE FUNCTION Nakopp(d integer, typeofwork varchar, mon integer, obj varchar)
+RETURNS TABLE (Period integer, Plan integer, Fact integer, PlanNakop integer, FactNakop integer)
 LANGUAGE SQL AS
 $$
-   select distinct
-   	date_trunc(a, date_w) as Period,
-   	sum(plan) as Plan,
-   	sum(fact) as Fact,
-   	sum(plan) over (order by date_trunc(a, date_w)) as PlanKanop,
-   	sum(fact) over (order by date_trunc(a, date_w)) as FactNakop
-   FROM public.plan_fact_analysis WHERE object = obj 
-   GROUP BY date_trunc(a, date_w), plan, fact;
+   SELECT
+   EXTRACT(YEAR FROM date_w),
+   sum(plan) as Plan,
+   sum(fact) as Fact,
+   sum(plan) over (order by date_w) as PlanKanop,
+   sum(fact) over (order by date_w) as FactNakop
+   FROM public.plan_fact_analysis
+   WHERE object = obj and
+   		 EXTRACT(YEAR FROM date_w) = d and
+   		 EXTRACT(MONTH FROM date_w) = mon and
+   		 work = typeofwork
+   GROUP BY date_w, plan, fact;
 $$;
-
