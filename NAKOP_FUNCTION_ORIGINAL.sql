@@ -8,6 +8,6 @@ $$
    	sum(fact) as Fact,
    	sum(plan) over (order by date_trunc(mon, date_w)) as PlanKanop,
    	sum(fact) over (order by date_trunc(mon, date_w)) as FactNakop
-	FROM public.plan_fact_analysis WHERE object = obj 
-	GROUP BY date_trunc(mon, date_w), plan, fact;
+   FROM public.plan_fact_analysis WHERE object = obj 
+   GROUP BY date_trunc(mon, date_w), plan, fact;
 $$;
