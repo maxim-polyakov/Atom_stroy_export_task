@@ -3,283 +3,282 @@ RETURNS TABLE (Period timestamptz, Plann  bigint, Factt  bigint, PlanNakop  bigi
 LANGUAGE plpgsql AS
 $$
 BEGIN
-	if mon is not null then
-		if yr is not null then 	
-			IF typeofwork is not null and obj is not null then
+	IF mon IS NOT NULL then
+		IF yr IS NOT NULL THEN 	
+			IF typeofwork IS NOT NULL AND obj IS NOT NULL THEN
 				RETURN QUERY
 				SELECT
-   				date_trunc('month', date_w) as Period,
-   				sum(plan) as Plann,
-   				sum(fact) as Factt,
-   				sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   				sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   				EXTRACT(YEAR FROM date_w) as yer,
-   				EXTRACT(MONTH FROM date_w) as mont,
-   				EXTRACT(DAY FROM date_w) as dayy
+   				date_trunc('month', date_w) AS Period,
+   				sum(plan) AS Plann,
+   				sum(fact) AS Factt,
+   				sum(plan) OVER (ORDER BY date_trunc('month', date_w)) AS PlanKanop,
+   				sum(fact) OVER (order BY date_trunc('month', date_w)) AS FactNakop,
+   				EXTRACT(YEAR FROM date_w) AS yer,
+   				EXTRACT(MONTH FROM date_w) AS mont,
+   				EXTRACT(DAY FROM date_w) AS dayy
    				FROM public.plan_fact_analysis
-    			WHERE object = obj and
-   				  	  work = typeofwork and 
-   				  	  EXTRACT(YEAR FROM date_w) = yr and
+    			WHERE object = obj AND
+   				  	  work = typeofwork AND 
+   				  	  EXTRACT(YEAR FROM date_w) = yr AND
    				  	  EXTRACT(MONTH FROM date_w) = mon
     			GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    		else
-    			if typeofwork is null and obj is not null then
+    		ELSE
+    			IF typeofwork IS NULL AND obj IS NOT NULL THEN
     				RETURN QUERY
     				SELECT
-   					date_trunc('year', date_w) as Period,
-   					sum(plan) as Plann,
-   					sum(fact) as Factt,
-   					sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   					sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   					EXTRACT(YEAR FROM date_w) as yer,
-   					EXTRACT(MONTH FROM date_w) as mont,
-   					EXTRACT(DAY FROM date_w) as dayy
+   					date_trunc('year', date_w) AS Period,
+   					sum(plan) AS Plann,
+   					sum(fact) AS Factt,
+   					sum(plan) OVER (ORDER BY date_trunc('month', date_w)) AS PlanKanop,
+   					sum(fact) OVER (ORDER BY date_trunc('month', date_w)) AS FactNakop,
+   					EXTRACT(YEAR FROM date_w) AS yer,
+   					EXTRACT(MONTH FROM date_w) AS mont,
+   					EXTRACT(DAY FROM date_w) AS dayy
    					FROM public.plan_fact_analysis
-    				WHERE object = obj and 
-    				  	  EXTRACT(YEAR FROM date_w) = yr and
+    				WHERE object = obj AND 
+    				  	  EXTRACT(YEAR FROM date_w) = yr AND
     				  	  EXTRACT(MONTH FROM date_w) = mon
     				GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    			else
-    				if typeofwork is null and obj is null then
+    			ELSE
+    				IF typeofwork IS NULL AND obj IS NULL THEN
     					RETURN QUERY
     					SELECT
-   						date_trunc('month', date_w) as Period,
-   						sum(plan) as Plann,
-   						sum(fact) as Factt,
-   						sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   						sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   						EXTRACT(YEAR FROM date_w) as yer,
-   						EXTRACT(MONTH FROM date_w) as mont,
-   						EXTRACT(DAY FROM date_w) as dayy
+   						date_trunc('month', date_w) AS Period,
+   						sum(plan) AS Plann,
+   						sum(fact) AS Factt,
+   						sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   						sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   						EXTRACT(YEAR FROM date_w) AS yer,
+   						EXTRACT(MONTH FROM date_w) AS mont,
+   						EXTRACT(DAY FROM date_w) AS dayy
    						FROM public.plan_fact_analysis
-    					WHERE EXTRACT(YEAR FROM date_w) = yr and
+    					WHERE EXTRACT(YEAR FROM date_w) = yr AND
     					  	  EXTRACT(MONTH FROM date_w) = mon
     					GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    				else
-    					if typeofwork is not null and obj is null then
+    				ELSE
+    					IF typeofwork IS NOT NULL AND obj IS NULL then
     						RETURN QUERY
     						SELECT
-   							date_trunc('month', date_w) as Period,
-   							sum(plan) as Plann,
-   							sum(fact) as Factt,
-   							sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   							sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   							EXTRACT(YEAR FROM date_w) as yer,
-   							EXTRACT(MONTH FROM date_w) as mont,
-   							EXTRACT(DAY FROM date_w) as dayy
+   							date_trunc('month', date_w) AS Period,
+   							sum(plan) AS Plann,
+   							sum(fact) AS Factt,
+   							sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   							sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   							EXTRACT(YEAR FROM date_w) AS yer,
+   							EXTRACT(MONTH FROM date_w) AS mont,
+   							EXTRACT(DAY FROM date_w) AS dayy
    							FROM public.plan_fact_analysis
-    						WHERE work = typeofwork and
-    						  	  EXTRACT(YEAR FROM date_w) = yr and
+    						WHERE work = typeofwork AND
+    						  	  EXTRACT(YEAR FROM date_w) = yr AND
     						  	  EXTRACT(MONTH FROM date_w) = mon
     						GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    					end if;
-    				end if;
-    			end if;
+    					END IF;
+    				END IF;
+    			END IF;
     		END IF;
-    	else
-    		IF typeofwork is not null and obj is not null then
+    	ELSE
+    		IF typeofwork IS NOT NULL AND obj IS NOT NULL then
 				RETURN QUERY
 				SELECT
-   				date_trunc('month', date_w) as Period,
-   				sum(plan) as Plann,
-   				sum(fact) as Factt,
-   				sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   				sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   				EXTRACT(YEAR FROM date_w) as yer,
-   				EXTRACT(MONTH FROM date_w) as mont,
-   				EXTRACT(DAY FROM date_w) as dayy
+   				date_trunc('month', date_w) AS Period,
+   				sum(plan) AS Plann,
+   				sum(fact) AS Factt,
+   				sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   				sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   				EXTRACT(YEAR FROM date_w) AS yer,
+   				EXTRACT(MONTH FROM date_w) AS mont,
+   				EXTRACT(DAY FROM date_w) AS dayy
    				FROM public.plan_fact_analysis
-    			WHERE object = obj and
-   				  	  work = typeofwork and 
+    			WHERE object = obj AND
+   				  	  work = typeofwork AND 
    				  	  EXTRACT(MONTH FROM date_w) = mon
     			GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    		else
-    			if typeofwork is null and obj is not null then
+    		ELSE
+    			IF typeofwork IS NULL AND obj IS NOT NULL then
     				RETURN QUERY
     				SELECT
-   					date_trunc('month', date_w) as Period,
-   					sum(plan) as Plann,
-   					sum(fact) as Factt,
-   					sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   					sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   					EXTRACT(YEAR FROM date_w) as yer,
-   					EXTRACT(MONTH FROM date_w) as mont,
-   					EXTRACT(DAY FROM date_w) as dayy
+   					date_trunc('month', date_w) AS Period,
+   					sum(plan) AS Plann,
+   					sum(fact) AS Factt,
+   					sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   					sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   					EXTRACT(YEAR FROM date_w) AS yer,
+   					EXTRACT(MONTH FROM date_w) AS mont,
+   					EXTRACT(DAY FROM date_w) AS dayy
    					FROM public.plan_fact_analysis
-    				WHERE object = obj and
+    				WHERE object = obj AND
     					  EXTRACT(MONTH FROM date_w) = mon
     				GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    			else
-    				if typeofwork is null and obj is null then
+    			ELSE
+    				IF typeofwork IS NULL AND obj IS NULL then
     					RETURN QUERY
     					SELECT
-   						date_trunc('month', date_w) as Period,
-   						sum(plan) as Plann,
-   						sum(fact) as Factt,
-   						sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   						sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   						EXTRACT(YEAR FROM date_w) as yer,
-   						EXTRACT(MONTH FROM date_w) as mont,
-   						EXTRACT(DAY FROM date_w) as dayy
+   						date_trunc('month', date_w) AS Period,
+   						sum(plan) AS Plann,
+   						sum(fact) AS Factt,
+   						sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   						sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   						EXTRACT(YEAR FROM date_w) AS yer,
+   						EXTRACT(MONTH FROM date_w) AS mont,
+   						EXTRACT(DAY FROM date_w) AS dayy
    						FROM public.plan_fact_analysis
     					WHERE EXTRACT(MONTH FROM date_w) = mon
     					GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    				else
-    					if typeofwork is not null and obj is null then
+    				ELSE
+    					IF typeofwork IS NOT NULL AND obj IS NULL then
     						RETURN QUERY
     						SELECT
-   							date_trunc('month', date_w) as Period,
-   							sum(plan) as Plann,
-   							sum(fact) as Factt,
-   							sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   							sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   							EXTRACT(YEAR FROM date_w) as yer,
-   							EXTRACT(MONTH FROM date_w) as mont,
-   							EXTRACT(DAY FROM date_w) as dayy
+   							date_trunc('month', date_w) AS Period,
+   							sum(plan) AS Plann,
+   							sum(fact) AS Factt,
+   							sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   							sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   							EXTRACT(YEAR FROM date_w) AS yer,
+   							EXTRACT(MONTH FROM date_w) AS mont,
+   							EXTRACT(DAY FROM date_w) AS dayy
    							FROM public.plan_fact_analysis
-    						WHERE work = typeofwork and
+    						WHERE work = typeofwork AND
     							  EXTRACT(MONTH FROM date_w) = mon
     						GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    					end if;
-    				end if;
-    			end if;
+    					END IF;
+    				END IF;
+    			END IF;
     		END IF;
-   		end if;
-   	else
-   		if yr is not null then 	
-			IF typeofwork is not null and obj is not null then
+   		END IF;
+   	ELSE
+   		IF yr IS NOT NULL then 	
+			IF typeofwork IS NOT NULL AND obj IS NOT NULL then
 				RETURN QUERY
 				SELECT
-   				date_trunc('month', date_w) as Period,
-   				sum(plan) as Plann,
-   				sum(fact) as Factt,
-   				sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   				sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   				EXTRACT(YEAR FROM date_w) as yer,
-   				EXTRACT(MONTH FROM date_w) as mont,
-   				EXTRACT(DAY FROM date_w) as dayy
+   				date_trunc('month', date_w) AS Period,
+   				sum(plan) AS Plann,
+   				sum(fact) AS Factt,
+   				sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   				sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   				EXTRACT(YEAR FROM date_w) AS yer,
+   				EXTRACT(MONTH FROM date_w) AS mont,
+   				EXTRACT(DAY FROM date_w) AS dayy
    				FROM public.plan_fact_analysis
-    			WHERE object = obj and
-   				  	  work = typeofwork and 
+    			WHERE object = obj AND
+   				  	  work = typeofwork AND 
    				  	  EXTRACT(YEAR FROM date_w) = yr
     			GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    		else
-    			if typeofwork is null and obj is not null then
+    		ELSE
+    			IF typeofwork IS NULL AND obj IS NOT NULL then
     				RETURN QUERY
     				SELECT
-   					date_trunc('month', date_w) as Period,
-   					sum(plan) as Plann,
-   					sum(fact) as Factt,
-   					sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   					sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   					EXTRACT(YEAR FROM date_w) as yer,
-   					EXTRACT(MONTH FROM date_w) as mont,
-   					EXTRACT(DAY FROM date_w) as dayy
+   					date_trunc('month', date_w) AS Period,
+   					sum(plan) AS Plann,
+   					sum(fact) AS Factt,
+   					sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   					sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   					EXTRACT(YEAR FROM date_w) AS yer,
+   					EXTRACT(MONTH FROM date_w) AS mont,
+   					EXTRACT(DAY FROM date_w) AS dayy
    					FROM public.plan_fact_analysis
-    				WHERE object = obj and 
+    				WHERE object = obj AND 
     				  	  EXTRACT(YEAR FROM date_w) = yr
     				GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    			else
-    				if typeofwork is null and obj is null then
+    			ELSE
+    				IF typeofwork IS NULL AND obj IS NULL then
     					RETURN QUERY
     					SELECT
-   						date_trunc('month', date_w) as Period,
-   						sum(plan) as Plann,
-   						sum(fact) as Factt,
-   						sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   						sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   						EXTRACT(YEAR FROM date_w) as yer,
-   						EXTRACT(MONTH FROM date_w) as mont,
-   						EXTRACT(DAY FROM date_w) as dayy
+   						date_trunc('month', date_w) AS Period,
+   						sum(plan) AS Plann,
+   						sum(fact) AS Factt,
+   						sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   						sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   						EXTRACT(YEAR FROM date_w) AS yer,
+   						EXTRACT(MONTH FROM date_w) AS mont,
+   						EXTRACT(DAY FROM date_w) AS dayy
    						FROM public.plan_fact_analysis
     					WHERE EXTRACT(YEAR FROM date_w) = yr
     					GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    				else
-    					if typeofwork is not null and obj is null then
+    				ELSE
+    					IF typeofwork IS NOT NULL AND obj IS NULL then
     						RETURN QUERY
     						SELECT
-   							date_trunc('month', date_w) as Period,
-   							sum(plan) as Plann,
-   							sum(fact) as Factt,
-   							sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   							sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   							EXTRACT(YEAR FROM date_w) as yer,
-   							EXTRACT(MONTH FROM date_w) as mont,
-   							EXTRACT(DAY FROM date_w) as dayy
+   							date_trunc('month', date_w) AS Period,
+   							sum(plan) AS Plann,
+   							sum(fact) AS Factt,
+   							sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   							sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   							EXTRACT(YEAR FROM date_w) AS yer,
+   							EXTRACT(MONTH FROM date_w) AS mont,
+   							EXTRACT(DAY FROM date_w) AS dayy
    							FROM public.plan_fact_analysis
-    						WHERE work = typeofwork and
+    						WHERE work = typeofwork AND
     						  	  EXTRACT(YEAR FROM date_w) = yr
     						GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    					end if;
-    				end if;
-    			end if;
+    					END IF;
+    				END IF;
+    			END IF;
     		END IF;
-    	else
-    		IF typeofwork is not null and obj is not null then
+    	ELSE
+    		IF typeofwork IS NOT NULL AND obj IS NOT NULL then
 				RETURN QUERY
 				SELECT
-   				date_trunc('month', date_w) as Period,
-   				sum(plan) as Plann,
-   				sum(fact) as Factt,
-   				sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   				sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   				EXTRACT(YEAR FROM date_w) as yer,
-   				EXTRACT(MONTH FROM date_w) as mont,
-   				EXTRACT(DAY FROM date_w) as dayy
+   				date_trunc('month', date_w) AS Period,
+   				sum(plan) AS Plann,
+   				sum(fact) AS Factt,
+   				sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   				sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   				EXTRACT(YEAR FROM date_w) AS yer,
+   				EXTRACT(MONTH FROM date_w) AS mont,
+   				EXTRACT(DAY FROM date_w) AS dayy
    				FROM public.plan_fact_analysis
-    			WHERE object = obj and
+    			WHERE object = obj AND
    				  	  work = typeofwork 
     			GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    		else
-    			if typeofwork is null and obj is not null then
+    		ELSE
+    			IF typeofwork IS NULL AND obj IS NOT NULL then
     				RETURN QUERY
     				SELECT
-   					date_trunc('month', date_w) as Period,
-   					sum(plan) as Plann,
-   					sum(fact) as Factt,
-   					sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   					sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   					EXTRACT(YEAR FROM date_w) as yer,
-   					EXTRACT(MONTH FROM date_w) as mont,
-   					EXTRACT(DAY FROM date_w) as dayy
+   					date_trunc('month', date_w) AS Period,
+   					sum(plan) AS Plann,
+   					sum(fact) AS Factt,
+   					sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   					sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   					EXTRACT(YEAR FROM date_w) AS yer,
+   					EXTRACT(MONTH FROM date_w) AS mont,
+   					EXTRACT(DAY FROM date_w) AS dayy
    					FROM public.plan_fact_analysis
     				WHERE object = obj
     				GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    			else
-    				if typeofwork is null and obj is null then
+    			ELSE
+    				IF typeofwork IS NULL AND obj IS NULL then
     					RETURN QUERY
     					SELECT
-   						date_trunc('month', date_w) as Period,
-   						sum(plan) as Plann,
-   						sum(fact) as Factt,
-   						sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   						sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   						EXTRACT(YEAR FROM date_w) as yer,
-   						EXTRACT(MONTH FROM date_w) as mont,
-   						EXTRACT(DAY FROM date_w) as dayy
+   						date_trunc('month', date_w) AS Period,
+   						sum(plan) AS Plann,
+   						sum(fact) AS Factt,
+   						sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   						sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   						EXTRACT(YEAR FROM date_w) AS yer,
+   						EXTRACT(MONTH FROM date_w) AS mont,
+   						EXTRACT(DAY FROM date_w) AS dayy
    						FROM public.plan_fact_analysis
     					GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    				else
-    					if typeofwork is not null and obj is null then
+    				ELSE
+    					IF typeofwork IS NOT NULL AND obj IS NULL then
     						RETURN QUERY
     						SELECT
-   							date_trunc('month', date_w) as Period,
-   							sum(plan) as Plann,
-   							sum(fact) as Factt,
-   							sum(plan) over (order by date_trunc('month', date_w)) as PlanKanop,
-   							sum(fact) over (order by date_trunc('month', date_w)) as FactNakop,
-   							EXTRACT(YEAR FROM date_w) as yer,
-   							EXTRACT(MONTH FROM date_w) as mont,
-   							EXTRACT(DAY FROM date_w) as dayy
+   							date_trunc('month', date_w) AS Period,
+   							sum(plan) AS Plann,
+   							sum(fact) AS Factt,
+   							sum(plan) over (order by date_trunc('month', date_w)) AS PlanKanop,
+   							sum(fact) over (order by date_trunc('month', date_w)) AS FactNakop,
+   							EXTRACT(YEAR FROM date_w) AS yer,
+   							EXTRACT(MONTH FROM date_w) AS mont,
+   							EXTRACT(DAY FROM date_w) AS dayy
    							FROM public.plan_fact_analysis
     						WHERE work = typeofwork
     						GROUP BY date_trunc('month', date_w),date_w, plan, fact;
-    					end if;
-    				end if;
-    			end if;
+    					END IF;
+    				END IF;
+    			END IF;
     		END IF;
-   		end if;
-   	end if;
+   		END IF;
+   	END IF;
 END;
 $$;
-
